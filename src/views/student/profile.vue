@@ -34,10 +34,13 @@
           素质分：{{ grade.quality }}
         </div>
         <div class="text item">
-          班级排名：{{ grade.classRank }}
+          班级综合排名：{{ grade.classRank }}
         </div>
         <div class="text item">
-          专业排名：{{ grade.specRank }}
+          专业综合排名：{{ grade.specRank }}
+        </div>
+        <div class="text item">
+          是否挂科：{{ grade.fail?'是':'否' }}
         </div>
       </el-card>
     </el-col>
@@ -46,6 +49,7 @@
 
 <script>
 import { gradeInfo, student } from '@/api/student'
+
 export default {
   data() {
     return {
@@ -81,19 +85,23 @@ export default {
     .text {
         font-size: 14px;
     }
+
     .item {
         margin-bottom: 18px;
     }
+
     .clearfix:before,
     .clearfix:after {
         display: table;
         content: "";
     }
+
     .clearfix:after {
         clear: both
     }
+
     .box-card {
-      margin-top: 25px;
-      width: 480px;
+        margin-top: 25px;
+        width: 480px;
     }
 </style>
