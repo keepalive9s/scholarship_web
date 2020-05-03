@@ -8,6 +8,18 @@ export function upload(id, data) {
     data
   })
 }
+export function student() {
+  return request({
+    url: '/api/student',
+    method: 'get'
+  })
+}
+export function gradeInfo(year) {
+  return request({
+    url: '/api/grade/student/' + year,
+    method: 'get'
+  })
+}
 
 export function del(id) {
   return request({
