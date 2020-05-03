@@ -41,7 +41,7 @@
         @size-change="queryAll"
       />
     </el-card>
-    <el-dialog :visible.sync="uploadDialogVisible" title="导入学生信息" width="800px">
+    <el-dialog :visible.sync="uploadDialogVisible" title="导入学生信息" width="800px" :close-on-click-modal="false">
       <el-form>
         <el-form-item label="请选择学生所属班级">
           <el-cascader

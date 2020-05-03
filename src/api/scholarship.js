@@ -15,6 +15,13 @@ export function del(id) {
   })
 }
 
+export function find(id) {
+  return request({
+    url: '/api/scholarship/' + id,
+    method: 'get'
+  })
+}
+
 export function list() {
   return request({
     url: '/api/scholarship',

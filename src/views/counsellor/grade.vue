@@ -58,7 +58,7 @@
         @size-change="queryAll"
       />
     </el-card>
-    <el-dialog :visible.sync="uploadScoreDialogVisible" title="导入考试分数据">
+    <el-dialog :visible.sync="uploadScoreDialogVisible" title="导入考试分数据" :close-on-click-modal="false">
       <el-form>
         <el-form-item label="请输入学期">
           <el-input v-model="year" />
@@ -66,7 +66,7 @@
       </el-form>
       <upload-excel :on-success="handleSuccess1" :before-upload="beforeUpload" :headers="headers1" />
     </el-dialog>
-    <el-dialog :visible.sync="uploadQualityDialogVisible" title="导入素质分数据">
+    <el-dialog :visible.sync="uploadQualityDialogVisible" title="导入素质分数据" :close-on-click-modal="false">
       <el-form>
         <el-form-item label="请输入学期">
           <el-input v-model="year" />

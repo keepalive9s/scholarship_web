@@ -57,7 +57,7 @@
         <el-button type="primary" @click="submitUpdate">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="createDialogVisible" title="添加辅导员信息" width="800px">
+    <el-dialog :visible.sync="createDialogVisible" title="添加辅导员信息" width="800px" :close-on-click-modal="false">
       <el-form>
         <el-form-item label="工号">
           <el-input v-model="counsellor.staffId" />

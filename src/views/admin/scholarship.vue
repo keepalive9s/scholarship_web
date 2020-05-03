@@ -16,8 +16,23 @@
         <el-table-column prop="id" label="ID" />
         <el-table-column prop="name" label="名称" />
         <el-table-column prop="year" label="学期" />
+        <el-table-column prop="assigned" label="已分配" />
         <el-table-column label="操作">
           <template slot-scope="scope">
+            <el-button
+              round
+              size="mini"
+              type="success"
+              @click="showDistributeDialog(scope.row)"
+            >分配名额
+            </el-button>
+            <el-button
+              round
+              size="mini"
+              type="primary"
+              @click="showUpdateDialog(scope.row)"
+            >修改
+            </el-button>
             <el-button
               round
               size="mini"
@@ -29,19 +44,19 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <el-dialog :visible.sync="createDialogVisible" title="创建奖学金">
-      <el-form>
+    <el-dialog :visible.sync="createDialogVisible" title="创建奖学金" :close-on-click-modal="false">
+      <el-form label-width="80px">
         <el-form-item label="名称">
-          <el-input v-model="newScholarship.name" />
+          <el-input v-model="createData.name" />
         </el-form-item>
         <el-form-item label="介绍">
-          <el-input v-model="newScholarship.description" type="textarea" />
+          <el-input v-model="createData.description" type="textarea" />
         </el-form-item>
         <el-form-item label="要求">
-          <el-input v-model="newScholarship.requirement" type="textarea" />
+          <el-input v-model="createData.requirement" type="textarea" />
         </el-form-item>
-        <el-form-item label="请输入学期">
-          <el-input v-model="newScholarship.year" />
+        <el-form-item label="学期">
+          <el-input v-model="createData.year" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -49,17 +64,49 @@
         <el-button type="primary" @click="submitCreate">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog :visible.sync="updateDialogVisible" title="修改奖学金信息" :close-on-click-modal="false">
+      <el-form :model="updateData" label-width="80px">
+        <el-form-item label="名称">
+          <el-input v-model="updateData.name" disabled />
+        </el-form-item>
+        <el-form-item label="介绍">
+          <el-input v-model="updateData.description" type="textarea" />
+        </el-form-item>
+        <el-form-item label="要求">
+          <el-input v-model="updateData.requirement" type="textarea" />
+        </el-form-item>
+        <el-form-item label="学期">
+          <el-input v-model="updateData.year" disabled />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitCreate">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="distributeDialogVisible" title="分配名额" :close-on-click-modal="false">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="distributeDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitCreate">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-main>
 </template>
 
 <script>
-import { del, create, list } from '@/api/scholarship'
+import { del, create, list, find } from '@/api/scholarship'
 
 export default {
   name: 'Scholarship',
   data() {
     return {
-      newScholarship: {
+      createData: {
+        name: null,
+        description: null,
+        requirement: null,
+        year: null
+      },
+      updateData: {
         name: null,
         description: null,
         requirement: null,
@@ -67,6 +114,7 @@ export default {
       },
       tableData: [],
       createDialogVisible: false,
+      updateDialogVisible: false,
       distributeDialogVisible: false,
       defaultProps: {
         value: 'id',
@@ -85,8 +133,20 @@ export default {
         this.tableData = res.data
       })
     },
+    showUpdateDialog(data) {
+      find(data.id).then(res => {
+        this.updateData = res.data
+      })
+      this.updateDialogVisible = true
+    },
+    showDistributeDialog(data) {
+      // find(data.id).then(res => {
+      //   this.updateData = res.data
+      // })
+      this.distributeDialogVisible = true
+    },
     submitCreate() {
-      create(this.newScholarship).then(res => {
+      create(this.createData).then(res => {
         this.$notify({
           title: res.data,
           type: 'success',

@@ -60,6 +60,28 @@ const routes = [
         component: () => import('@/views/counsellor/grade')
       }
     ]
+  },
+  {
+    path: '/student',
+    component: () => import('@/views/student/index'),
+    redirect: '/student/profile',
+    children: [
+      {
+        name: 'profile',
+        path: 'profile',
+        component: () => import('@/views/student/profile')
+      },
+      {
+        name: 'scholarship',
+        path: 'scholarship',
+        component: () => import('@/views/student/scholarship')
+      },
+      {
+        name: 'public',
+        path: 'public',
+        component: () => import('@/views/student/public')
+      }
+    ]
   }
 ]
 

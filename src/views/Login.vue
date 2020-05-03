@@ -22,6 +22,7 @@
           v-model="loginForm.password"
           placeholder="密码"
           name="password"
+          type="password"
           tabindex="2"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
@@ -35,11 +36,11 @@
         @click.native.prevent="handleLogin"
       >登陆
       </el-button>
-
     </el-form>
     <p>用户名与密码相同</p>
     <p>管理员:admin</p>
-    <p>辅导员:123455、123456、123457</p>
+    <p>辅导员:123456、123457、123458</p>
+    <p>学生:学号,身份证后六位</p>
   </div>
 </template>
 

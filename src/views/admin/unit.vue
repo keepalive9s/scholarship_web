@@ -15,7 +15,7 @@
       </div>
       <el-tree :data="noRootTree" :props="defaultProps" default-expand-all show-checkbox node-key="id" @check="handleCheckChange" />
     </el-card>
-    <el-dialog title="添加新组织单位" :visible.sync="unitAddDialogVisible" width="800px" @open="queryTree">
+    <el-dialog title="添加新组织单位" :visible.sync="unitAddDialogVisible" width="800px" @open="queryTree" :close-on-click-modal="false">
       <el-form>
         <el-form-item label="组织名称">
           <el-input v-model="newUnit.name" />
