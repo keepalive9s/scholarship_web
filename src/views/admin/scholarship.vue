@@ -43,10 +43,10 @@
           <el-input v-model="createData.name" />
         </el-form-item>
         <el-form-item label="介绍">
-          <el-input v-model="createData.description" type="textarea" />
+          <el-input v-model="createData.description" type="textarea" rows="6" />
         </el-form-item>
         <el-form-item label="要求">
-          <el-input v-model="createData.requirement" type="textarea" />
+          <el-input v-model="createData.requirement" type="textarea" rows="6" />
         </el-form-item>
         <el-form-item label="学期">
           <el-input v-model="createData.year" />
@@ -63,10 +63,10 @@
           <el-input v-model="updateData.name" disabled />
         </el-form-item>
         <el-form-item label="介绍">
-          <el-input v-model="updateData.description" type="textarea" />
+          <el-input v-model="updateData.description" type="textarea" rows="6" />
         </el-form-item>
         <el-form-item label="要求">
-          <el-input v-model="updateData.requirement" type="textarea" />
+          <el-input v-model="updateData.requirement" type="textarea" rows="6" />
         </el-form-item>
         <el-form-item label="学期">
           <el-input v-model="updateData.year" disabled />
