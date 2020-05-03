@@ -16,16 +16,9 @@
         <el-table-column prop="id" label="ID" />
         <el-table-column prop="name" label="名称" />
         <el-table-column prop="year" label="学期" />
-        <el-table-column prop="assigned" label="已分配" />
+        <el-table-column prop="assigned" label="获奖人数" />
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button
-              round
-              size="mini"
-              type="success"
-              @click="showDistributeDialog(scope.row)"
-            >分配名额
-            </el-button>
             <el-button
               round
               size="mini"
@@ -84,12 +77,6 @@
         <el-button type="primary" @click="submitCreate">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="distributeDialogVisible" title="分配名额" :close-on-click-modal="false">
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="distributeDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitCreate">确 定</el-button>
-      </span>
-    </el-dialog>
   </el-main>
 </template>
 
@@ -115,7 +102,6 @@ export default {
       tableData: [],
       createDialogVisible: false,
       updateDialogVisible: false,
-      distributeDialogVisible: false,
       defaultProps: {
         value: 'id',
         children: 'children',
@@ -138,12 +124,6 @@ export default {
         this.updateData = res.data
       })
       this.updateDialogVisible = true
-    },
-    showDistributeDialog(data) {
-      // find(data.id).then(res => {
-      //   this.updateData = res.data
-      // })
-      this.distributeDialogVisible = true
     },
     submitCreate() {
       create(this.createData).then(res => {
