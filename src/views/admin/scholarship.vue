@@ -69,14 +69,14 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="updateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitCreate">确 定</el-button>
+        <el-button type="primary" @click="submitUpdate">确 定</el-button>
       </span>
     </el-dialog>
   </el-main>
 </template>
 
 <script>
-import { del, create, listAll, find } from '@/api/scholarship'
+import { del, create, listAll, find, update } from '@/api/scholarship'
 import { listYears } from '@/api/admin'
 
 export default {
@@ -133,6 +133,23 @@ export default {
         })
         this.showTable()
         this.createDialogVisible = false
+      }).catch(error => {
+        this.$notify({
+          title: error.data,
+          type: 'error',
+          duration: 2500
+        })
+      })
+    },
+    submitUpdate() {
+      update(this.updateData).then(res => {
+        this.$notify({
+          title: res.data,
+          type: 'success',
+          duration: 2500
+        })
+        this.showTable()
+        this.updateDialogVisible = false
       }).catch(error => {
         this.$notify({
           title: error.data,

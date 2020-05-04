@@ -8,6 +8,14 @@ export function create(data) {
   })
 }
 
+export function update(data) {
+  return request({
+    url: '/api/scholarship',
+    method: 'put',
+    data
+  })
+}
+
 export function del(id) {
   return request({
     url: '/api/scholarship/' + id,
