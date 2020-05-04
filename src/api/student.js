@@ -8,15 +8,16 @@ export function upload(id, data) {
     data
   })
 }
-export function student() {
+
+export function current() {
   return request({
-    url: '/api/student',
+    url: '/api/student/current',
     method: 'get'
   })
 }
-export function gradeInfo(year) {
+export function student(id) {
   return request({
-    url: '/api/grade/student/' + year,
+    url: '/api/student/info/' + id,
     method: 'get'
   })
 }
@@ -28,9 +29,9 @@ export function del(id) {
   })
 }
 
-export function listByYearUnitId(unitId, params) {
+export function listByUnit(id, params) {
   return request({
-    url: '/api/student/' + unitId,
+    url: '/api/student/unit/' + id,
     method: 'get',
     params
   })

@@ -12,9 +12,18 @@ const routes = [
   {
     path: '/',
     redirect: () => {
-      if (store.getters.role === 'ROLE_ADMIN') { return '/admin' }
-      if (store.getters.role === 'ROLE_STUDENT') { return '/student' }
-      if (store.getters.role === 'ROLE_COUNSELLOR') { return '/counsellor' }
+      const role = store.getters.role
+      if (role === 'ROLE_ADMIN') {
+        return '/admin'
+      } else if (role === 'ROLE_STUDENT') {
+        return '/student'
+      } else if (role === 'ROLE_COUNSELLOR') {
+        return '/counsellor'
+      } else {
+        store.dispatch('logout').then(() => {
+          return '/login'
+        })
+      }
     }
   },
   {
@@ -38,6 +47,11 @@ const routes = [
         component: () => import('@/views/admin/counsellor')
       },
       {
+        name: 'system',
+        path: 'system',
+        component: () => import('@/views/admin/system')
+      },
+      {
         name: 'password',
         path: 'password',
         component: () => import('@/views/admin/password')
@@ -58,6 +72,16 @@ const routes = [
         name: 'grade',
         path: 'grade',
         component: () => import('@/views/counsellor/grade')
+      },
+      {
+        name: 'judge',
+        path: 'judge',
+        component: () => import('@/views/counsellor/judge')
+      },
+      {
+        name: 'password',
+        path: 'password',
+        component: () => import('@/views/counsellor/password')
       }
     ]
   },
@@ -80,6 +104,11 @@ const routes = [
         name: 'public',
         path: 'public',
         component: () => import('@/views/student/public')
+      },
+      {
+        name: 'password',
+        path: 'password',
+        component: () => import('@/views/student/password')
       }
     ]
   }

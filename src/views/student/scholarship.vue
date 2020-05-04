@@ -2,12 +2,11 @@
   <el-main>
     <el-card>
       <div slot="header" class="clearfix">
-        <span>奖学金</span>
+        <span>可申请的奖学金</span>
       </div>
       <el-table :data="tableData">
-        <el-table-column prop="id" label="ID" />
-        <el-table-column prop="name" label="名称" />
-        <el-table-column prop="year" label="学期" />
+        <el-table-column prop="name" label="奖学金名称" />
+        <el-table-column prop="year" label="学年" />
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -31,26 +30,31 @@
     <el-dialog :visible.sync="detailDialogVisible" :title="detailData.year+'学年'+detailData.name+'奖学金详细信息'">
       <el-form label-width="50px">
         <el-form-item label="介绍">
-          <el-input v-model="detailData.description" type="textarea" rows="6"/>
+          <el-input v-model="detailData.description" type="textarea" rows="6" />
         </el-form-item>
         <el-form-item label="要求">
-          <el-input v-model="detailData.requirement" type="textarea" rows="6"/>
+          <el-input v-model="detailData.requirement" type="textarea" rows="6" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="detailDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="detailDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </el-main>
 </template>
 
 <script>
-import { list, find } from '@/api/scholarship'
+import { listCurrentAll, find } from '@/api/scholarship'
 import { create } from '@/api/application'
+import { current } from '@/api/student'
 
 export default {
   data() {
     return {
+      application: {
+        studentId: null,
+        scholarshipId: null
+      },
       detailData: {
         name: '',
         description: '',
@@ -62,11 +66,11 @@ export default {
     }
   },
   mounted() {
-    this.listAll()
+    this.getTableData()
   },
   methods: {
-    listAll() {
-      list().then(res => {
+    getTableData() {
+      listCurrentAll().then(res => {
         this.tableData = res.data
       })
     },
@@ -77,11 +81,15 @@ export default {
       this.detailDialogVisible = true
     },
     handleSubmit(item) {
-      create(item.id).then(res => {
-        this.$notify({
-          title: res.data,
-          type: 'success',
-          duration: 2500
+      current().then(res => {
+        this.application.scholarshipId = item.id
+        this.application.studentId = res.data.studentId
+        create(this.application).then(res => {
+          this.$notify({
+            title: res.data,
+            type: 'success',
+            duration: 2500
+          })
         })
       })
     }

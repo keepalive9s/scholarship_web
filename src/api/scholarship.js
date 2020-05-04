@@ -22,9 +22,16 @@ export function find(id) {
   })
 }
 
-export function list() {
+export function listAll() {
   return request({
-    url: '/api/scholarship',
+    url: '/api/scholarship/all',
+    method: 'get'
+  })
+}
+
+export function listCurrentAll() {
+  return request({
+    url: '/api/scholarship/year',
     method: 'get'
   })
 }

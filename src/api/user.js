@@ -1,37 +1,16 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function auth(data) {
   return request({
-    url: '/api/auth/signin',
+    url: '/api/user/auth',
     method: 'post',
     params: data
   })
 }
 
-export function role() {
+export function info() {
   return request({
-    url: '/api/auth/role',
-    method: 'get'
-  })
-}
-
-export function admin() {
-  return request({
-    url: '/api/admin/auth',
-    method: 'get'
-  })
-}
-
-export function counsellor() {
-  return request({
-    url: '/api/counsellor/auth',
-    method: 'get'
-  })
-}
-
-export function student() {
-  return request({
-    url: '/api/student/auth',
+    url: '/api/user/info',
     method: 'get'
   })
 }

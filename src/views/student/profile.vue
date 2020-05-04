@@ -1,10 +1,7 @@
 <template>
-  <el-row :gutter="20" type="flex" justify="center">
-    <el-col :span="10">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>个人信息</span>
-        </div>
+  <el-row :gutter="40">
+    <el-col :span="12">
+      <el-card header="个人信息">
         <div class="text item">
           学号：{{ student.studentId }}
         </div>
@@ -22,11 +19,8 @@
         </div>
       </el-card>
     </el-col>
-    <el-col :span="10">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>{{ grade.year }}学年数据</span>
-        </div>
+    <el-col :span="12">
+      <el-card :header="grade.year + '学年数据'">
         <div class="text item">
           考试平均分：{{ grade.score }}
         </div>
@@ -48,7 +42,8 @@
 </template>
 
 <script>
-import { gradeInfo, student } from '@/api/student'
+import { current } from '@/api/student'
+import { grade } from '@/api/grade'
 
 export default {
   data() {
@@ -71,37 +66,15 @@ export default {
     }
   },
   mounted() {
-    gradeInfo('2018-2019').then(res => {
-      this.grade = res.data
-    })
-    student().then(res => {
+    current().then(res => {
       this.student = res.data
+      grade(res.data.studentId).then(res => {
+        this.grade = res.data
+      })
     })
   }
 }
 </script>
 
 <style scoped>
-    .text {
-        font-size: 14px;
-    }
-
-    .item {
-        margin-bottom: 18px;
-    }
-
-    .clearfix:before,
-    .clearfix:after {
-        display: table;
-        content: "";
-    }
-
-    .clearfix:after {
-        clear: both
-    }
-
-    .box-card {
-        margin-top: 25px;
-        width: 480px;
-    }
 </style>

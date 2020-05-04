@@ -19,20 +19,8 @@
         <el-table-column prop="assigned" label="获奖人数" />
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button
-              round
-              size="mini"
-              type="primary"
-              @click="showUpdateDialog(scope.row)"
-            >修改
-            </el-button>
-            <el-button
-              round
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row)"
-            >删除
-            </el-button>
+            <el-button round size="mini" type="primary" @click="showUpdateDialog(scope.row)">修改</el-button>
+            <el-button round size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -49,7 +37,14 @@
           <el-input v-model="createData.requirement" type="textarea" rows="6" />
         </el-form-item>
         <el-form-item label="学期">
-          <el-input v-model="createData.year" />
+          <el-select v-model="createData.year" placeholder="选择学期">
+            <el-option
+              v-for="(item, index) in years"
+              :key="index"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -81,10 +76,10 @@
 </template>
 
 <script>
-import { del, create, list, find } from '@/api/scholarship'
+import { del, create, listAll, find } from '@/api/scholarship'
+import { listYears } from '@/api/admin'
 
 export default {
-  name: 'Scholarship',
   data() {
     return {
       createData: {
@@ -100,6 +95,7 @@ export default {
         year: null
       },
       tableData: [],
+      years: [],
       createDialogVisible: false,
       updateDialogVisible: false,
       defaultProps: {
@@ -111,11 +107,14 @@ export default {
     }
   },
   mounted() {
-    this.listAll()
+    this.showTable()
+    listYears().then(res => {
+      this.years = res.data
+    })
   },
   methods: {
-    listAll() {
-      list().then(res => {
+    showTable() {
+      listAll().then(res => {
         this.tableData = res.data
       })
     },
@@ -132,7 +131,7 @@ export default {
           type: 'success',
           duration: 2500
         })
-        this.listAll()
+        this.showTable()
         this.createDialogVisible = false
       }).catch(error => {
         this.$notify({
@@ -149,7 +148,7 @@ export default {
           type: 'success',
           duration: 2500
         })
-        this.listAll()
+        this.showTable()
       })
     }
   }

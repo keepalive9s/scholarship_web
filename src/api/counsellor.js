@@ -7,6 +7,12 @@ export function create(data) {
     data
   })
 }
+export function current() {
+  return request({
+    url: '/api/counsellor/current',
+    method: 'get'
+  })
+}
 
 export function list() {
   return request({

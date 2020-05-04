@@ -41,7 +41,7 @@
         @size-change="queryAll"
       />
     </el-card>
-    <el-dialog :visible.sync="uploadDialogVisible" title="导入学生信息" width="800px" :close-on-click-modal="false">
+    <el-dialog :visible.sync="uploadDialogVisible" title="按班级导入学生信息" width="800px" :close-on-click-modal="false">
       <el-form>
         <el-form-item label="请选择学生所属班级">
           <el-cascader
@@ -53,16 +53,19 @@
           />
         </el-form-item>
       </el-form>
-      <upload-excel :on-success="handleSuccess" :before-upload="beforeUpload" :headers="['studentId', 'name', 'sex', 'idNumber']" />
+      <upload-excel
+        :on-success="handleSuccess"
+        :before-upload="beforeUpload"
+        :headers="['studentId', 'name', 'sex', 'idNumber']"
+      />
     </el-dialog>
   </el-main>
 </template>
 <script>
 import UploadExcel from '../../components/UploadExcel'
-import { upload } from '@/api/student'
 import { tree } from '@/api/unit'
-import store from '@/store'
-import { del, listByYearUnitId } from '@/api/student'
+import { current } from '@/api/counsellor'
+import { del, listByUnit, upload } from '@/api/student'
 
 export default {
   components: { UploadExcel },
@@ -88,23 +91,14 @@ export default {
     }
   },
   mounted() {
-    if (store.getters.counsellor.unitId == null) {
-      const unWatch = this.$watch(function() {
-        return store.getters.counsellor.unitId
-      }, function(newVal, oldVal) {
-        this.queryAll().then(() => {
-          unWatch()
-        })
-      })
-    } else {
-      this.queryAll()
-    }
+    this.queryAll()
   },
   methods: {
     queryAll() {
-      return listByYearUnitId(store.getters.counsellor.unitId,
-        { current: this.page.current, size: this.page.size }).then(res => {
-        this.page = res.data
+      current().then(res => {
+        listByUnit(res.data.unitId, { current: this.page.current, size: this.page.size }).then(response => {
+          this.page = response.data
+        })
       })
     },
     handleDelete(item) {
@@ -115,11 +109,19 @@ export default {
           duration: 2500
         })
         this.queryAll()
+      }).catch(() => {
+        this.$notify({
+          title: '删除失败',
+          type: 'error',
+          duration: 2500
+        })
       })
     },
     queryTree() {
-      tree(store.getters.counsellor.unitId).then(response => {
-        this.tree = response.data
+      current().then(res => {
+        tree(res.data.unitId).then(response => {
+          this.tree = response.data
+        })
       })
     },
     beforeUpload(file) {

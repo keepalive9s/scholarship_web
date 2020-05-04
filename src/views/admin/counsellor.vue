@@ -17,22 +17,10 @@
         <el-table-column prop="name" label="姓名" />
         <el-table-column prop="collage" label="学院" />
         <el-table-column prop="year" label="年级" />
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
-            <el-button
-              round
-              size="mini"
-              type="warning"
-              @click="handleEdit(scope.row)"
-            >编辑
-            </el-button>
-            <el-button
-              round
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row)"
-            >删除
-            </el-button>
+            <el-button round size="mini" type="warning" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button round size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -16,9 +16,16 @@ export function del(id, year) {
   })
 }
 
-export function listByYearUnitId(unitId, params) {
+export function grade(id) {
   return request({
-    url: '/api/grade/' + unitId,
+    url: '/api/grade/student/' + id,
+    method: 'get'
+  })
+}
+
+export function listByUnit(id, params) {
+  return request({
+    url: '/api/grade/unit/' + id,
     method: 'get',
     params
   })

@@ -41,8 +41,6 @@
 </template>
 
 <script>
-// import store from '@/store'
-
 export default {
   name: 'Login',
   data() {
@@ -69,7 +67,9 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('login', this.loginForm).then(() => {
-            this.$store.dispatch('getRole').then(() => {
+            console.log('login success')
+            this.$store.dispatch('getInfo').then(() => {
+              console.log('getInfo success')
               this.loading = false
               this.$router.push({ path: this.redirect || '/' })
             }).catch(() => {

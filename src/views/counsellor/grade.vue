@@ -54,22 +54,36 @@
         :total="page.total"
         :page-sizes="[8, 10, 20, 50]"
         layout="total, sizes, prev, pager, next, jumper"
-        @current-change="queryAll"
-        @size-change="queryAll"
+        @current-change="queryData"
+        @size-change="queryData"
       />
     </el-card>
-    <el-dialog :visible.sync="uploadScoreDialogVisible" title="导入考试分数据" :close-on-click-modal="false">
+    <el-dialog :visible.sync="uploadScoreDialogVisible" title="导入考试分数据" :close-on-click-modal="false" width="700px">
       <el-form>
-        <el-form-item label="请输入学期">
-          <el-input v-model="year" />
+        <el-form-item label="学期:">
+          <el-select v-model="year" placeholder="选择学期">
+            <el-option
+              v-for="(item, index) in years"
+              :key="index"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <upload-excel :on-success="handleSuccess1" :before-upload="beforeUpload" :headers="headers1" />
     </el-dialog>
-    <el-dialog :visible.sync="uploadQualityDialogVisible" title="导入素质分数据" :close-on-click-modal="false">
+    <el-dialog :visible.sync="uploadQualityDialogVisible" title="导入素质分数据" :close-on-click-modal="false" width="700px">
       <el-form>
-        <el-form-item label="请输入学期">
-          <el-input v-model="year" />
+        <el-form-item label="学期:">
+          <el-select v-model="year" placeholder="选择学期">
+            <el-option
+              v-for="(item, index) in years"
+              :key="index"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <upload-excel :on-success="handleSuccess2" :before-upload="beforeUpload" :headers="headers2" />
@@ -79,8 +93,9 @@
 
 <script>
 import UploadExcel from '@/components/UploadExcel'
-import { del, upload, listByYearUnitId } from '@/api/grade'
-import store from '@/store'
+import { current } from '@/api/counsellor'
+import { del, upload, listByUnit } from '@/api/grade'
+import { listYears } from '@/api/admin'
 
 export default {
   components: { UploadExcel },
@@ -99,6 +114,7 @@ export default {
       uploadScoreDialogVisible: false,
       uploadQualityDialogVisible: false,
       grades: [],
+      years: [],
       year: null,
       defaultProps: {
         value: 'id',
@@ -109,23 +125,17 @@ export default {
     }
   },
   mounted() {
-    if (store.getters.counsellor.unitId == null) {
-      const unWatch = this.$watch(function() {
-        return store.getters.counsellor.unitId
-      }, function(newVal, oldVal) {
-        this.queryAll().then(() => {
-          unWatch()
-        })
-      })
-    } else {
-      this.queryAll()
-    }
+    this.queryData()
+    listYears().then(res => {
+      this.years = res.data
+    })
   },
   methods: {
-    queryAll() {
-      return listByYearUnitId(store.getters.counsellor.unitId,
-        { current: this.page.current, size: this.page.size }).then(res => {
-        this.page = res.data
+    queryData() {
+      current().then(res => {
+        listByUnit(res.data.unitId, { current: this.page.current, size: this.page.size }).then(res => {
+          this.page = res.data
+        })
       })
     },
     handleDelete(item) {
@@ -135,7 +145,7 @@ export default {
           type: 'success',
           duration: 2500
         })
-        this.queryAll()
+        this.queryData()
       })
     },
     beforeUpload(file) {
@@ -160,7 +170,7 @@ export default {
           duration: 2500
         })
         this.scoreLoading = false
-        this.queryAll()
+        this.queryData()
       }).catch(error => {
         this.$notify({
           title: error,
@@ -181,7 +191,7 @@ export default {
           duration: 2500
         })
         this.qualityLoading = false
-        this.queryAll()
+        this.queryData()
       }).catch(error => {
         this.$notify({
           title: error,

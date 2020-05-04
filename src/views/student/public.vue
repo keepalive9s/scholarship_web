@@ -10,7 +10,7 @@
         <el-table-column prop="spec" label="专业" />
         <el-table-column prop="clazz" label="班级" />
         <el-table-column prop="year" label="学年" />
-        <el-table-column prop="scholarshipName" label="奖学金" />
+        <el-table-column prop="scholarship" label="奖学金" />
         <el-table-column prop="level" label="等级" />
       </el-table>
     </el-card>

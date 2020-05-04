@@ -1,38 +1,37 @@
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
-import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/token' // get token from cookie
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+import { getToken } from '@/utils/token'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login', 'logout']
 
 router.beforeEach(async(to, from, next) => {
-  // start progress bar
+  console.log(to.path + '->' + from.path)
   NProgress.start()
-
-  // determine whether the user has logged in
   const hasToken = getToken()
-
   if (hasToken) {
+    console.log('hasToken')
     if (to.path === '/login') {
-      // if is logged in, redirect to the home page
+      console.log('Login重定向/')
       next({ path: '/' })
       NProgress.done()
     } else {
       const hasRole = store.getters.role
       if (hasRole) {
+        console.log('hasRole')
         next()
       } else {
         try {
-          await store.dispatch('getRole')
+          console.log('getInfo')
+          await store.dispatch('getInfo')
           next()
         } catch (error) {
-          // remove token and go to login page to re-login
+          console.log('get info error')
           await store.dispatch('logout')
-          await store.dispatch('')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
@@ -40,12 +39,12 @@ router.beforeEach(async(to, from, next) => {
       }
     }
   } else {
-    /* has no token*/
+    console.log('noToken')
     if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
+      console.log('白名单')
       next()
     } else {
-      // other pages that do not have permission to access are redirected to the login page.
+      console.log('*重定向Login')
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }
@@ -53,6 +52,5 @@ router.beforeEach(async(to, from, next) => {
 })
 
 router.afterEach(() => {
-  // finish progress bar
   NProgress.done()
 })
